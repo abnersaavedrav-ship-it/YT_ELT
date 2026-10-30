@@ -1,7 +1,7 @@
 import requests
 import pytest
 import psycopg2
-
+from datawarehouse.data_utils import create_schema, create_table
 
 def test_youtube_api_response(airflow_variable):
     api_key = airflow_variable("api_key")
@@ -35,6 +35,11 @@ def test_real_postgres_connection(real_postgres_connection):
 
 def test_staging_table_exists(real_postgres_connection):
 
+    # Crear el esquema y la tabla utilizando las funciones reales del proyecto.
+    create_schema("staging")
+    create_table("staging")
+
+    # Verificar que la tabla existe en PostgreSQL.
     cursor = real_postgres_connection.cursor()
 
     try:
@@ -44,7 +49,9 @@ def test_staging_table_exists(real_postgres_connection):
 
         result = cursor.fetchone()
 
-        assert result[0] is not None
+        assert result[0] is not None, (
+            "La tabla staging.yt_api no existe en PostgreSQL"
+        )
 
     finally:
         cursor.close()
