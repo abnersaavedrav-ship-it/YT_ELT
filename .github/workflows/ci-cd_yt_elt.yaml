@@ -48,7 +48,7 @@ jobs:
       runs-on: ubuntu-latest
       needs: build-and-push-image
       env:
-        IMAGE_TAG: latest
+        IMAGE_TAG: 1.0.1
         AIRFLOW_VAR_API_KEY: ${{ secrets.API_KEY }}
         AIRFLOW_VAR_CHANNEL_HANDLE: ${{ vars.CHANNEL_HANDLE }}
         AIRFLOW_WWW_USER_PASSWORD: ${{ secrets.AIRFLOW_WWW_USER_PASSWORD }}
@@ -91,6 +91,13 @@ jobs:
               Dockerfile
               requirements.txt
               .github/workflows/**
+        - name: Validate Docker image configuration
+          run: |
+            test -n "$DOCKERHUB_NAMESPACE" || { echo "DOCKERHUB_NAMESPACE is missing"; exit 1; }
+            test -n "$DOCKERHUB_REPOSITORY" || { echo "DOCKERHUB_REPOSITORY is missing"; exit 1; }
+            test -n "$IMAGE_TAG" || { echo "IMAGE_TAG is missing"; exit 1; }
+
+            echo "Docker image configuration validated"
         - name: Set up Docker Compose
           if: steps.changed-files-tests.outputs.any_changed == 'true' || github.event_name == 'workflow_dispatch'
           run: docker compose up -d --wait --pull always
