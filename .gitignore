@@ -1,4 +1,27 @@
+# Entornos virtuales
 venv/
+.venv/
+
+# Python
 __pycache__/
+*.pyc
+.pytest_cache/
+
+# Credenciales y variables de entorno
 .env
+.env.*
+!.env.example
+
+# Logs
 logs/
+*.log
+
+# Configuración local de VS Code
+.vscode/
+
+# Archivos temporales
+.DS_Store
+Thumbs.db
+
+# Archivos de datos generados
+# data/*.json
