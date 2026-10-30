@@ -26,4 +26,3 @@ Thumbs.db
 # Archivos de datos generados
 data/*.json
 
-.github/workflows/ci-cd_yt_elt.yaml
